@@ -26,18 +26,16 @@ class LoginSpider(scrapy.Spider):
 
     def parse_listado_hc(self, response):
         
-        #table = response.xpath('//*[@class="html body div.mainContainer div.main.col-lg-10 div.content div.row div.col-lg-12 div.panel.panel-default div.panel-body div.table-responsive table#dataTables-example.table.table-striped.table-bordered.table-hover"]//tbody')
-        #rows = table.xpath('//tr')
-
         rows = response.xpath('/html/body/div[2]/div[2]/div/div/div/div/div[6]/div/table/tbody//tr')
         for row in rows:
-            print(row.extract())
-        #currentHC = {
-        #        'numero' : row.xpath('td[1]//text').extract_first(),
-        #        'nombre' : row.xpath('td[2]//text').extract_first(),
-        #        'apellido' : row.xpath('td[3]//text').extract_first(),
-        #        'documento' : row.xpath('td[3]//text').extract_first(),
-        #        'linkHC' : row.xpath('td[4]//text').extract_first(),
-        #        'linkEstudios' : row.xpath('td[5]//text').extract_first(),
-        #        }
-        #print(currentHC)
+            currentHC = {
+                    'numero' : row.xpath('td[1]//text()').extract_first(),
+                    'nombre' : row.xpath('td[2]//text()').extract_first(),
+                    'apellido' : row.xpath('td[3]//text()').extract_first(),
+                    'documento' : row.xpath('td[3]//text()').extract_first(),
+                    'linkHC' : row.xpath('td[4]/a/@href').extract(),
+                    }
+            print(currentHC)
+
+
+                    #'linkEstudios' : row.xpath('td[5]/a//text()').extract_first(),
