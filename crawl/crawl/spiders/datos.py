@@ -1,20 +1,16 @@
-# -*- coding: utf-8 -*-
 import scrapy
 from scrapy.http import Request
-from scrapy.http.cookies import CookieJar
 import json
 
 def authentication_failed(response):
     if b'Los datos ingresados son incorrectos' in response.body:
         return True
 
-class HistoriaclinicaSpider(scrapy.Spider):
-    name = 'historiaclinica'
-    allowed_domains = ['www.intranet.cardioprieto.com']
-    start_urls = ['http://www.intranet.cardioprieto.com/index.php/hClinica/listar/1']
-
-    #start_urls = ['http://www.intranet.cardioprieto.com/index.php/hClinica/listar/%s' % page for page in range(1,5)]
-    #start_urls = ['http://www.intranet.cardioprieto.com/index.php/hClinica/index']
+class LoginSpider(scrapy.Spider):
+    name = 'ListaHistoriaClinicaPaciente'
+    start_urls = ['http://www.intranet.cardioprieto.com/index.php/hClinica/listar/1',
+                  'http://www.intranet.cardioprieto.com/index.php/hClinica/listar/2',]
+    print("CHOTAAAAAAAAAAAAAAAAAAAA", start_urls)
 
     def parse(self, response):
         return scrapy.FormRequest.from_response(
@@ -27,12 +23,12 @@ class HistoriaclinicaSpider(scrapy.Spider):
         if authentication_failed(response):
             self.logger.error("ERROR EN USUARIO O PASSWORD AL INGRESAR AL SISTEMA")
             return
-#        link = 'http://www.intranet.cardioprieto.com/index.php/hClinica/index'
-#        yield Request(url=link, callback=self.parse_listado_hc)
-#
-#
-#    def parse_listado_hc(self, response):
+        #link = 'http://www.intranet.cardioprieto.com/index.php/hClinica/listar/1'
+        #yield Request(url=link, callback=self.parse_listado_hc)
 
+    #def parse_listado_hc(self, response):
+
+        print("CULOROTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
         rows = response.xpath('/html/body/div[2]/div[2]/div/div/div/div/div[6]/div/table/tbody//tr')
         for row in rows:
             currentHC = {
@@ -44,10 +40,5 @@ class HistoriaclinicaSpider(scrapy.Spider):
                     }
             print(currentHC)
 
-        #paginador = response.xpath('/html/body/div[2]/div[2]/div/div/div/div/div[7]/div/ul')
-        #print(paginador)
 
-        #for item in paginador:
-        #    aver = item.xpath('//*[@id="paginador"]/div/ul/li[1]')
-        #    print(aver.xpath('a/@href').extract_first())
-        #    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                    #'linkEstudios' : row.xpath('td[5]/a//text()').extract_first(),
